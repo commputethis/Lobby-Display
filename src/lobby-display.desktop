@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Lobby Display
+Exec=AppRun
+Icon=lobby-display
+Type=Application
+Categories=System;

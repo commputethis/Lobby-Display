@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{{ config.device_name }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        nav {
+            background: #16213e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        nav a {
+            color: #e94560;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        nav a:hover { color: #fff; }
+        h1, h2 { color: #e94560; margin-bottom: 20px; }
+        .card {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        button, .btn {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        button:hover, .btn:hover { background: #ff6b6b; }
+        input, select {
+            background: #0f3460;
+            color: #fff;
+            border: 1px solid #533483;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        label { display: block; margin: 15px 0 5px 0; color: #a0a0a0; }
+        small { color: #888; display: block; margin-top: 5px; }
+        code {
+            background: #0f3460;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #e94560;
+        }
+        .drop-zone {
+            border: 3px dashed #533483;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .drop-zone.dragover { background: #0f3460; border-color: #e94560; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #533483;
+        }
+        th { color: #e94560; }
+        .status { padding: 4px 12px; border-radius: 4px; font-size: 12px; }
+        .status.active { background: #2ecc71; }
+        .status.inactive { background: #95a5a6; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/playlists">Playlists</a>
+            <a href="/settings">Settings</a>
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

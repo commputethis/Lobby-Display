@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Playlists</h1>
+
+<div class="card">
+    <h2>Create New Playlist</h2>
+    <input type="text" id="newPlaylistName" placeholder="Playlist name">
+    <button onclick="createPlaylist()">Create</button>
+</div>
+
+<div class="card">
+    <h2>All Playlists</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Items</th>
+            <th>Actions</th>
+        </tr>
+        {% for playlist in playlists %}
+        <tr>
+            <td>{{ playlist.name }}</td>
+            <td>{{ playlist.item_count }}</td>
+            <td>
+                <a href="/playlist/{{ playlist.id }}" class="btn">Edit</a>
+                {% if playlist.name != 'default' %}
+                <button onclick="deletePlaylist({{ playlist.id }})" class="btn">Delete</button>
+                {% endif %}
+                <button onclick="setActive({{ playlist.id }})" class="btn">Set Active</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+async function createPlaylist() {
+    const name = document.getElementById('newPlaylistName').value;
+    if (!name) return;
+    
+    const response = await fetch('/playlists', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'create', name: name})
+    });
+    
+    if (response.ok) location.reload();
+}
+
+async function deletePlaylist(id) {
+    if (!confirm('Delete this playlist?')) return;
+    
+    await fetch('/playlists', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'delete', id: id})
+    });
+    
+    location.reload();
+}
+
+async function setActive(id) {
+    await fetch('/playlists', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action: 'set_active', id: id})
+    });
+    
+    location.reload();
+}
+</script>
+{% endblock %}

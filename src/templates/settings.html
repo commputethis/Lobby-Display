@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Settings</h1>
+
+<div class="card">
+    <form id="settingsForm">
+        <h2>Device Identity</h2>
+        
+        <label>Display Name:</label>
+        <input type="text" name="device_name" value="{{ config.device_name }}" 
+               placeholder="e.g., Lobby Display, Conference Room">
+        <small>This name appears in the web interface and as the mDNS hostname.</small>
+        
+        {% if mdns_hostname %}
+        <p><strong>mDNS Address:</strong> <code>http://{{ mdns_hostname }}:5000</code></p>
+        {% endif %}
+        
+        <h2>Display Configuration</h2>
+        
+        <label>Resolution:</label>
+        <select name="resolution">
+            <option value="1920x1080" {% if config.resolution == '1920x1080' %}selected{% endif %}>1920x1080 (1080p)</option>
+            <option value="1280x720" {% if config.resolution == '1280x720' %}selected{% endif %}>1280x720 (720p)</option>
+            <option value="1024x768" {% if config.resolution == '1024x768' %}selected{% endif %}>1024x768</option>
+        </select>
+        
+        <label>Software Rotation:</label>
+        <select name="rotation">
+            <option value="0" {% if config.rotation == 0 %}selected{% endif %}>0°</option>
+            <option value="90" {% if config.rotation == 90 %}selected{% endif %}>90°</option>
+            <option value="180" {% if config.rotation == 180 %}selected{% endif %}>180°</option>
+            <option value="270" {% if config.rotation == 270 %}selected{% endif %}>270°</option>
+        </select>
+        <small>For hardware rotation, edit /boot/config.txt and reboot.</small>
+        
+        <h2>Slideshow</h2>
+        
+        <label>Default Duration (seconds):</label>
+        <input type="number" name="default_duration" value="{{ config.default_duration }}" min="1">
+        
+        <label>
+            <input type="checkbox" name="fade_transition" {% if config.fade_transition %}checked{% endif %}>
+            Enable Fade Transitions
+        </label>
+        
+        <br><br>
+        <button type="submit">Save Settings</button>
+        <div id="message"></div>
+    </form>
+</div>
+
+<script>
+document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    const response = await fetch('/settings', {method: 'POST', body: formData});
+    const result = await response.json();
+    
+    const msg = document.getElementById('message');
+    if (result.success) {
+        msg.textContent = 'Settings saved!';
+        if (result.new_hostname) {
+            msg.innerHTML += `<br>New address: http://${result.new_hostname}:5000`;
+        }
+    } else {
+        msg.textContent = 'Error saving settings';
+    }
+});
+</script>
+{% endblock %}

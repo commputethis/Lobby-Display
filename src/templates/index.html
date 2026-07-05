@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ config.device_name }}</h1>
+
+<div class="card">
+    <h2>Device Info</h2>
+    <p><strong>Web Interface:</strong> 
+       <code>http://{{ mdns_hostname or request.host }}:5000</code></p>
+    {% if mdns_hostname %}
+    <small>mDNS hostname (accessible on supported devices)</small>
+    {% endif %}
+    <p><strong>Current Playlist:</strong> <strong>{{ current }}</strong></p>
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <a href="/upload" class="btn">Upload Images</a>
+    <a href="/playlists" class="btn">Manage Playlists</a>
+    <a href="/settings" class="btn">Settings</a>
+</div>
+
+<div class="card">
+    <h2>Playlists</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for playlist in playlists %}
+        <tr>
+            <td>{{ playlist.name }}</td>
+            <td>
+                {% if playlist.name == current %}
+                <span class="status active">Active</span>
+                {% else %}
+                <span class="status inactive">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/playlist/{{ playlist.id }}" class="btn">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

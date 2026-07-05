@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Playlist: {{ playlist.name }}</h1>
+
+<div class="card">
+    <h2>Current Items</h2>
+    <div id="itemsList">
+        {% for item in items %}
+        <div class="item-row" data-id="{{ item.id }}">
+            <img src="/uploads/{{ item.filename }}" width="100">
+            <span>{{ item.original_name }}</span>
+            <input type="number" class="duration" value="{{ item.effective_duration }}" 
+                   placeholder="Seconds" style="width: 80px;">
+            <button onclick="removeItem({{ item.id }})">Remove</button>
+        </div>
+        {% endfor %}
+    </div>
+    <button onclick="saveOrder()">Save Changes</button>
+</div>
+
+<div class="card">
+    <h2>Add Images</h2>
+    <select id="availableImages" multiple style="height: 200px;">
+        {% for img in all_images %}
+        <option value="{{ img.id }}">{{ img.original_name }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="addImages()">Add Selected</button>
+</div>
+
+<script>
+async function removeItem(itemId) {
+    await fetch('/playlist/{{ playlist.id }}/update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({remove_item: itemId})
+    });
+    location.reload();
+}
+
+async function addImages() {
+    const select = document.getElementById('availableImages');
+    const selected = Array.from(select.selectedOptions).map(o => parseInt(o.value));
+    
+    await fetch('/playlist/{{ playlist.id }}/update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({add_images: selected})
+    });
+    location.reload();
+}
+
+async function saveOrder() {
+    const rows = document.querySelectorAll('.item-row');
+    const items = Array.from(rows).map((row, index) => ({
+        id: parseInt(row.dataset.id),
+        order: index,
+        duration: parseInt(row.querySelector('.duration').value) || null
+    }));
+    
+    await fetch('/playlist/{{ playlist.id }}/update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({items: items})
+    });
+    
+    alert('Saved!');
+}
+</script>
+
+<style>
+.item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #533483;
+}
+.item-row img {
+    border-radius: 4px;
+}
+</style>
+{% endblock %}

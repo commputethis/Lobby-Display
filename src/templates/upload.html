@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Upload Images</h1>
+
+<div class="card">
+    <form id="uploadForm">
+        <label>Select Playlist (optional):</label>
+        <select name="playlist_id">
+            <option value="">-- No playlist --</option>
+            {% for playlist in playlists %}
+            <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <div class="drop-zone" id="dropZone">
+            <p>Drag & drop images here or click to select</p>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+        </div>
+        
+        <div id="fileList"></div>
+        <button type="submit">Upload</button>
+        <div id="progress"></div>
+    </form>
+</div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+    updateFileList();
+});
+
+fileInput.addEventListener('change', updateFileList);
+
+function updateFileList() {
+    fileList.innerHTML = '<h3>Files to upload:</h3>';
+    for (let file of fileInput.files) {
+        const div = document.createElement('div');
+        div.textContent = file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
+        fileList.appendChild(div);
+    }
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('playlist_id', document.querySelector('[name="playlist_id"]').value);
+    for (let file of fileInput.files) {
+        formData.append('files', file);
+    }
+    
+    document.getElementById('progress').textContent = 'Uploading...';
+    
+    try {
+        const response = await fetch('/upload', {method: 'POST', body: formData});
+        const result = await response.json();
+        if (result.success) {
+            document.getElementById('progress').textContent = `Uploaded ${result.files.length} file(s)!`;
+            fileInput.value = '';
+            fileList.innerHTML = '';
+        }
+    } catch (err) {
+        document.getElementById('progress').textContent = 'Error: ' + err;
+    }
+});
+</script>
+{% endblock %}
