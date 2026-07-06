@@ -18,6 +18,11 @@ jobs:
       uses: docker/setup-qemu-action@v3
       with:
         platforms: arm64
+
+    - name: Make scripts executable
+      run: |
+        chmod +x build.sh
+        chmod +x src/AppRun
     
     - name: Build in ARM container
       uses: uraimo/run-on-arch-action@v2
