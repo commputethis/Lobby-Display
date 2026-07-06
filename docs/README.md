@@ -4,6 +4,8 @@ A standalone digital signage solution for Raspberry Pi that operates entirely wi
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Lobby Display Screenshot](./images/screenshot.png)
+
 ## Features
 
 - **Fully Standalone** - No cloud services, no subscriptions, no internet required
