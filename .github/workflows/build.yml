@@ -31,16 +31,27 @@ jobs:
           -w /workspace \
           arm64v8/python:3.11-slim bash -c "
             apt-get update && \
-            apt-get install -y wget git sudo && \
-            chmod +x build.sh && \
-            chmod +x src/AppRun && \
-            sed -i 's|./appimagetool-.*.AppImage|echo \"Skipping appimagetool in container\"|g' build.sh && \
-            ./build.sh --build-only
+            apt-get install -y wget git file && \
+            python3 -m venv build_venv && \
+            source build_venv/bin/activate && \
+            pip install flask pillow pygame zeroconf && \
+            mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/lobby-display && \
+            mkdir -p AppDir/usr/share/lobby-display/templates && \
+            mkdir -p AppDir/usr/share/lobby-display/static && \
+            cp build_venv/bin/python3 AppDir/usr/bin/ && \
+            cp -r build_venv/lib/python3.*/site-packages/* AppDir/usr/lib/ && \
+            cp src/app.py src/display.py src/mdns.py AppDir/usr/share/lobby-display/ && \
+            cp -r src/templates/* AppDir/usr/share/lobby-display/templates/ && \
+            cp -r src/static/* AppDir/usr/share/lobby-display/static/ 2>/dev/null || true && \
+            cp src/AppRun AppDir/ && chmod +x AppDir/AppRun && \
+            cp src/lobby-display.desktop AppDir/ && \
+            cp src/lobby-display.png AppDir/ 2>/dev/null || true
           "
     
-    - name: Build AppImage with x86_64 appimagetool
+    - name: Build AppImage
       run: |
-        ./appimagetool-x86_64.AppImage AppDir "lobby-display-1.0.0-aarch64.AppImage"
+        VERSION=$(grep 'VERSION=' build.sh | head -1 | cut -d'"' -f2)
+        ./appimagetool-x86_64.AppImage AppDir "lobby-display-${VERSION}-aarch64.AppImage"
     
     - name: Upload AppImage artifact
       uses: actions/upload-artifact@v4
