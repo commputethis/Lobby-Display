@@ -45,19 +45,16 @@ jobs:
             cp -r src/static/* AppDir/usr/share/lobby-display/static/ 2>/dev/null || true && \
             cp src/AppRun AppDir/ && chmod +x AppDir/AppRun && \
             cp src/lobby-display.desktop AppDir/ && \
-            cp src/lobby-display.png AppDir/
+            cp src/lobby-display.png AppDir/ && \
+            ln -sf lobby-display.png AppDir/.DirIcon
           "
     
-    - name: Prepare AppDir
-      run: |
-        # Create .DirIcon symlink (required by appimagetool)
-        cd AppDir && ln -sf lobby-display.png .DirIcon && cd ..
-        ls -la AppDir/.DirIcon
+    - name: Fix permissions for appimagetool
+      run: sudo chown -R $(id -u):$(id -g) AppDir/
     
     - name: Build AppImage
       run: |
         VERSION=$(grep 'VERSION=' build.sh | head -1 | cut -d'"' -f2)
-        # Disable FUSE and build
         export APPIMAGE_EXTRACT_AND_RUN=1
         ./appimagetool-x86_64.AppImage AppDir "lobby-display-${VERSION}-aarch64.AppImage"
     
