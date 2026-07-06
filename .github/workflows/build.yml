@@ -51,7 +51,9 @@ jobs:
     - name: Build AppImage
       run: |
         VERSION=$(grep 'VERSION=' build.sh | head -1 | cut -d'"' -f2)
-        ./appimagetool-x86_64.AppImage AppDir "lobby-display-${VERSION}-aarch64.AppImage"
+        # Extract appimagetool and run without FUSE
+        ./appimagetool-x86_64.AppImage --appimage-extract
+        ./squashfs-root/AppRun AppDir "lobby-display-${VERSION}-aarch64.AppImage"
     
     - name: Upload AppImage artifact
       uses: actions/upload-artifact@v4
