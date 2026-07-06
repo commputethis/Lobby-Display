@@ -45,15 +45,21 @@ jobs:
             cp -r src/static/* AppDir/usr/share/lobby-display/static/ 2>/dev/null || true && \
             cp src/AppRun AppDir/ && chmod +x AppDir/AppRun && \
             cp src/lobby-display.desktop AppDir/ && \
-            cp src/lobby-display.png AppDir/ 2>/dev/null || true
+            cp src/lobby-display.png AppDir/
           "
+    
+    - name: Prepare AppDir
+      run: |
+        # Create .DirIcon symlink (required by appimagetool)
+        cd AppDir && ln -sf lobby-display.png .DirIcon && cd ..
+        ls -la AppDir/.DirIcon
     
     - name: Build AppImage
       run: |
         VERSION=$(grep 'VERSION=' build.sh | head -1 | cut -d'"' -f2)
-        # Extract appimagetool and run without FUSE
-        ./appimagetool-x86_64.AppImage --appimage-extract
-        ./squashfs-root/AppRun AppDir "lobby-display-${VERSION}-aarch64.AppImage"
+        # Disable FUSE and build
+        export APPIMAGE_EXTRACT_AND_RUN=1
+        ./appimagetool-x86_64.AppImage AppDir "lobby-display-${VERSION}-aarch64.AppImage"
     
     - name: Upload AppImage artifact
       uses: actions/upload-artifact@v4
