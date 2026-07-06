@@ -4,6 +4,7 @@ Standalone digital signage for Raspberry Pi. No cloud, no subscriptions, no inte
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://commputethis.github.io/lobby-display/)
+[![Build](https://github.com/commputethis/lobby-display/actions/workflows/build.yml/badge.svg)](https://github.com/commputethis/lobby-display/actions/workflows/build.yml)
 
 ![Lobby Display Screenshot](docs/images/screenshot.png)
 

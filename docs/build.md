@@ -20,7 +20,7 @@ sudo apt install -y python3-pip python3-venv wget git
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/lobby-display.git
+git clone https://github.com/commputethis/lobby-display.git
 cd lobby-display
 ```
 

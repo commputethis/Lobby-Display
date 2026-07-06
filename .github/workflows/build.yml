@@ -1,0 +1,48 @@
+name: Build AppImage
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64
+    
+    - name: Build in ARM container
+      uses: uraimo/run-on-arch-action@v2
+      with:
+        arch: aarch64
+        distro: bullseye
+        
+        install: |
+          apt-get update -q
+          apt-get install -y -q python3-pip python3-venv wget git
+        
+        run: |
+          chmod +x build.sh
+          ./build.sh
+    
+    - name: Upload AppImage artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lobby-display-aarch64
+        path: lobby-display-*.AppImage
+    
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: lobby-display-*.AppImage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

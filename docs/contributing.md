@@ -242,9 +242,8 @@ Maintainers will:
 1. Review and merge approved PRs
 2. Update version numbers
 3. Run full test suite
-4. Build AppImage for both architectures
-5. Create GitHub release with notes
-6. Update documentation
+4. Create GitHub release with notes
+5. Update documentation
 
 ### Community
 
@@ -262,4 +261,5 @@ By contributing, you agree that your contributions will be licensed under the MI
 - Open a GitHub Discussion for general questions
 - Comment on relevant issues for specific questions
 - Check existing documentation first
+
 Thank you for contributing to Lobby Display!

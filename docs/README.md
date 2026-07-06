@@ -26,7 +26,7 @@ A standalone digital signage solution for Raspberry Pi that operates entirely wi
 
 ```bash
 # Download the latest AppImage
-wget https://github.com/yourusername/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-aarch64.AppImage
+wget https://github.com/commputethis/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-aarch64.AppImage
 
 # Make executable and install
 chmod +x lobby-display-1.0.0-aarch64.AppImage

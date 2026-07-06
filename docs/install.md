@@ -26,10 +26,10 @@ uname -m
 
 ```bash
 # For 64-bit systems (most common)
-wget https://github.com/yourusername/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-aarch64.AppImage
+wget https://github.com/commputethis/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-aarch64.AppImage
 
 # For 32-bit systems
-wget https://github.com/yourusername/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-armhf.AppImage
+wget https://github.com/commputethis/lobby-display/releases/download/v1.0.0/lobby-display-1.0.0-armhf.AppImage
 ```
 
 ### Option B: Build from Source
@@ -37,7 +37,7 @@ wget https://github.com/yourusername/lobby-display/releases/download/v1.0.0/lobb
 If you prefer to build your own AppImage:
 
 ```bash
-git clone https://github.com/yourusername/lobby-display.git
+git clone https://github.com/commputethis/lobby-display.git
 cd lobby-display
 chmod +x build.sh
 ./build.sh
