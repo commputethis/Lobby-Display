@@ -18,7 +18,12 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
     
-    - name: Build in ARM container
+    - name: Download appimagetool (x86_64)
+      run: |
+        wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+        chmod +x appimagetool-x86_64.AppImage
+    
+    - name: Build AppDir in ARM container
       run: |
         docker run --rm --privileged \
           --platform linux/arm64 \
@@ -29,8 +34,13 @@ jobs:
             apt-get install -y wget git sudo && \
             chmod +x build.sh && \
             chmod +x src/AppRun && \
-            ./build.sh
+            sed -i 's|./appimagetool-.*.AppImage|echo \"Skipping appimagetool in container\"|g' build.sh && \
+            ./build.sh --build-only
           "
+    
+    - name: Build AppImage with x86_64 appimagetool
+      run: |
+        ./appimagetool-x86_64.AppImage AppDir "lobby-display-1.0.0-aarch64.AppImage"
     
     - name: Upload AppImage artifact
       uses: actions/upload-artifact@v4
