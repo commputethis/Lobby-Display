@@ -314,6 +314,20 @@ def delete_image(image_id):
     conn.close()
     return jsonify({'success': True})
 
+@app.route('/images', methods=['GET'])
+def list_images():
+    """List all images with delete option"""
+    conn = get_db()
+    images = conn.execute('''
+        SELECT i.*, COUNT(pi.id) as playlist_count 
+        FROM images i 
+        LEFT JOIN playlist_items pi ON i.id = pi.image_id 
+        GROUP BY i.id
+        ORDER BY i.uploaded_at DESC
+    ''').fetchall()
+    conn.close()
+    return render_template('images.html', images=images)
+
 if __name__ == '__main__':
     if not os.path.exists(DB_PATH):
         init_db()

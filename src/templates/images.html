@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Manage Images</h1>
+
+<div class="card">
+    <p>Total images: {{ images|length }}</p>
+    <a href="/upload" class="btn">Upload New Images</a>
+</div>
+
+<div class="card">
+    <h2>All Images</h2>
+    {% if images %}
+    <table>
+        <tr>
+            <th>Preview</th>
+            <th>Name</th>
+            <th>Uploaded</th>
+            <th>Used In</th>
+            <th>Action</th>
+        </tr>
+        {% for image in images %}
+        <tr>
+            <td><img src="/uploads/{{ image.filename }}" width="100"></td>
+            <td>{{ image.original_name }}</td>
+            <td>{{ image.uploaded_at }}</td>
+            <td>{{ image.playlist_count }} playlist(s)</td>
+            <td>
+                <button onclick="deleteImage({{ image.id }}, '{{ image.original_name }}')" 
+                        class="btn" 
+                        style="background: #c0392b;">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No images uploaded yet.</p>
+    {% endif %}
+</div>
+
+<script>
+async function deleteImage(id, name) {
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/delete-image/${id}`, {
+            method: 'POST'
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Image deleted');
+            location.reload();
+        } else {
+            alert('Error: ' + (result.error || 'Unknown error'));
+        }
+    } catch (err) {
+        alert('Error: ' + err);
+    }
+}
+</script>
+
+<style>
+td img {
+    border-radius: 4px;
+    object-fit: cover;
+    height: 60px;
+}
+</style>
+{% endblock %}
