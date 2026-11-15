@@ -37,10 +37,10 @@ Then open `http://your-pi-ip:5000` in any browser.
 
 ## Documentation
 
-- **[Installation Guide](https://commputethis.github.io/lobby-display/INSTALL)** — Detailed setup instructions
-- **[Getting Started](https://commputethis.github.io/lobby-display/GETTING_STARTED)** — Using the web interface
-- **[Build from Source](https://commputethis.github.io/lobby-display/BUILD)** — Creating your own AppImage
-- **[Troubleshooting](https://commputethis.github.io/lobby-display/TROUBLESHOOTING)** — Common issues and fixes
+- **[Installation Guide](https://commputethis.github.io/Lobby-Display/INSTALL)** — Detailed setup instructions
+- **[Getting Started](https://commputethis.github.io/Lobby-Display/GETTING_STARTED)** — Using the web interface
+- **[Build from Source](https://commputethis.github.io/Lobby-Display/BUILD)** — Creating your own AppImage
+- **[Troubleshooting](https://commputethis.github.io/Lobby-Display/TROUBLESHOOTING)** — Common issues and fixes
 
 ## Project Structure
 
